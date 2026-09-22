@@ -1,21 +1,16 @@
-FROM python:3.6-alpine
+FROM python:3.14-slim
 
-ENV FLASK_APP flasky.py
-ENV FLASK_CONFIG production
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /app
 
-RUN adduser -D flasky
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    && useradd --create-home flasky
+
+COPY hello.py .
+COPY templates/ templates/
+
 USER flasky
-
-WORKDIR /home/flasky
-
-COPY requirements requirements
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements/docker.txt
-
-COPY app app
-COPY migrations migrations
-COPY flasky.py config.py boot.sh ./
-
-# run-time configuration
 EXPOSE 5000
-ENTRYPOINT ["./boot.sh"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/', timeout=2)" || exit 1
+CMD ["gunicorn", "--no-control-socket", "--bind", "0.0.0.0:5000", "--workers", "1", "--access-logfile", "-", "--error-logfile", "-", "hello:app"]

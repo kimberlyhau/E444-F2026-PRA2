@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "bootstrap4/form.html" import render_form %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    {% if non_uoft_email %}
+    <h1>Hello, Kimberly! Please use your UofT Email.</h1>
+    {% else %}
+    <h1>Hello, {% if name %}{{ name }}{% else %}Kimberly{% endif %}!</h1>
+    {% endif %}
+</div>
+<p>The local date and time is {{ moment(current_time).format('LLLL') }}.</p>
+{% if email %}
+<p>Your UofT email address is <strong>{{ email }}</strong>.</p>
+{% endif %}
+{{ render_form(form) }}
+{% endblock %}

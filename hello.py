@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from datetime import datetime, timezone
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap4
@@ -57,15 +56,3 @@ def index():
 
 if __name__ == "__main__":
     app.run()
-=======
-from flask import Flask
-app = Flask(__name__)
-@app.route('/')
-def index():
- return '<h1>Hello World!</h1>'
-@app.route('/user/<name>')
-def user(name):
- return '<h1>Hello, %s!</h1>' % name
-if __name__ == '__main__':
- app.run(debug=True)
->>>>>>> 4fbfb5f01017658ef34074acdf0d521b8539caa8
