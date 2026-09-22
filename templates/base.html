@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello {{ name }}!</title>
+    <style>
+        body { margin: 0; color: #333; font: 16px/1.5 Arial, sans-serif; }
+        nav { background: #222; }
+        .navigation { max-width: 1100px; margin: auto; padding: 14px 24px; display: flex; align-items: center; gap: 32px; }
+        nav a { color: #ddd; text-decoration: none; }
+        nav a:hover, nav a:focus { color: #fff; text-decoration: underline; }
+        .brand { font-size: 21px; }
+        main { max-width: 1100px; margin: 36px auto; padding: 0 24px; }
+        h1 { font-size: 36px; font-weight: 400; line-height: 1.2; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <nav aria-label="Main navigation">
+        <div class="navigation">
+            <a class="brand" href="{{ url_for('index') }}">Flasky</a>
+            <a href="{{ url_for('index') }}">Home</a>
+        </div>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script>
+        const timestamp = document.getElementById('timestamp');
+        if (timestamp && window.moment) {
+            timestamp.textContent = moment(timestamp.dateTime).format('LLLL');
+        }
+    </script>
+</body>
+</html>
