@@ -1,20 +1,30 @@
+from datetime import datetime, timezone
 from flask import Flask, render_template, session, redirect, url_for, flash
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap4
 from flask_moment import Moment
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import EmailField, StringField, SubmitField
+from wtforms.validators import DataRequired, Regexp, ValidationError
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap4(app)
 moment = Moment(app)
 
 
 class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
+    email = EmailField('What is your UofT email address?', validators=[
+        DataRequired(message='Please fill in a UofT email address.'),
+        Regexp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+               message='Please enter a valid email address.'),
+    ], filters=[lambda value: value.strip() if value else value])
     submit = SubmitField('Submit')
+
+    def validate_email(self, field):
+        if 'utoronto' not in field.data.lower():
+            raise ValidationError('Please fill in a UofT email address containing "utoronto".')
 
 
 @app.errorhandler(404)
@@ -35,5 +45,12 @@ def index():
         if old_name is not None and old_name != form.name.data:
             flash('Looks like you have changed your name!')
         session['name'] = form.name.data
+        session['email'] = form.email.data
         return redirect(url_for('index'))
-    return render_template('index.html', form=form, name=session.get('name'))
+    return render_template('index.html', form=form, name=session.get('name'),
+                           email=session.get('email'),
+                           current_time=datetime.now(timezone.utc))
+
+
+if __name__ == "__main__":
+    app.run()
