@@ -49,6 +49,8 @@ def index():
         return redirect(url_for('index'))
     return render_template('index.html', form=form, name=session.get('name'),
                            email=session.get('email'),
+                           non_uoft_email=(form.is_submitted() and bool(form.email.data)
+                                           and 'utoronto' not in form.email.data.lower()),
                            current_time=datetime.now(timezone.utc))
 
 
