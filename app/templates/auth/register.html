@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% from "bootstrap4/form.html" import render_form %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Flasky - Register{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
+<<<<<<< HEAD:templates/index.html
     {% if non_uoft_email %}
     <h1>Hello, Kimberly! Please use your UofT Email.</h1>
     {% else %}
@@ -16,4 +17,11 @@
 <p>Your UofT email address is <strong>{{ email }}</strong>.</p>
 {% endif %}
 {{ render_form(form) }}
+=======
+    <h1>Register</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+>>>>>>> 4fbfb5f01017658ef34074acdf0d521b8539caa8:app/templates/auth/register.html
 {% endblock %}
